@@ -1,105 +1,111 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Web3Auth } from "@web3auth/modal";
+// import { Web3Auth } from "@web3auth/modal";
+// import { CHAIN_NAMESPACES, WEB3AUTH_NETWORK } from "@web3auth/base";
+// import { EthereumPrivateKeyProvider } from "@web3auth/ethereum-provider";
 
 import AiLogo from "./assets/ai-logo.png";
 
-const clientId = import.meta.env.VITE_WEB3AUTH_CLIENT_ID;
-console.log(clientId);
+// const clientId = import.meta.env.VITE_WEB3AUTH_CLIENT_ID;
+// console.log(clientId);
 
-const chainConfig = {
-  chainNamespace: CHAIN_NAMESPACES.EIP155,
-  chainId: "0xaa36a7",
-  rpcTarget: "https://rpc.ankr.com/eth_sepolia",
-  displayName: "Sepolia Testnet",
-  blockExplorerUrl: "https://sepolia.etherscan.io/",
-  ticker: "ETH",
-  tickerName: "Ethereum",
-  logo: "https://assets.web3auth.io/evm-chains/sepolia.png",
-};
-const privateKeyProvider = new EthereumPrivateKeyProvider({
-  config: { chainConfig },
-});
+// const chainConfig = {
+//   chainNamespace: CHAIN_NAMESPACES.EIP155,
+//   chainId: "0xaa36a7",
+//   rpcTarget: "https://rpc.ankr.com/eth_sepolia",
+//   displayName: "Sepolia Testnet",
+//   blockExplorerUrl: "https://sepolia.etherscan.io/",
+//   ticker: "ETH",
+//   tickerName: "Ethereum",
+//   logo: "https://assets.web3auth.io/evm-chains/sepolia.png",
+// };
+// const privateKeyProvider = new EthereumPrivateKeyProvider({
+//   config: { chainConfig },
+// });
 
-const web3Auth = new Web3Auth({
-  clientId,
-  web3AuthNetwork: WEB3AUTH_NETWORK.SAPPHIRE_DEVNET,
-  privateKeyProvider,
-});
+// const web3Auth = new Web3Auth({
+//   clientId,
+//   web3AuthNetwork: WEB3AUTH_NETWORK.SAPPHIRE_DEVNET,
+//   privateKeyProvider,
+// });
 
 function App() {
-  const [provider, setProvider] = useState(null);
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [userInfo, setUserInfo] = useState(null);
-  const [loading, setLoading] = useState(true);
+  // const [provider, setProvider] = useState(null);
+  // const [loggedIn, setLoggedIn] = useState(false);
+  // const [userInfo, setUserInfo] = useState(null);
+  // const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const init = async () => {
-      try {
-        await web3Auth.initModal();
-        setProvider(web3Auth.provider);
+  // useEffect(() => {
+  //   const init = async () => {
+  //     try {
+  //       await web3Auth.initModal();
+  //       setProvider(web3Auth.provider);
 
-        if (web3Auth.connected) {
-          setLoggedIn(true);
-          const user = await web3Auth.getUserInfo();
-          setUserInfo(user);
-          // if (user.email) {
-          //   localStorage.setItem("userEmail", user.email);
-          //   try {
-          //     await createUser(user.email, user.name || "Anonymous User");
-          //   } catch (error) {
-          //     console.error("Error Creating User", error);
-          //   }
-          // }
-        }
-      } catch (error) {
-        console.error("Error Initializing Web3Auth", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    init();
-  }, []);
+  //       if (web3Auth.connected) {
+  //         setLoggedIn(true);
+  //         const user = await web3Auth.getUserInfo();
+  //         setUserInfo(user);
+  //         // if (user.email) {
+  //         //   localStorage.setItem("userEmail", user.email);
+  //         //   try {
+  //         //     await createUser(user.email, user.name || "Anonymous User");
+  //         //   } catch (error) {
+  //         //     console.error("Error Creating User", error);
+  //         //   }
+  //         // }
+  //       }
+  //     } catch (error) {
+  //       console.error("Error Initializing Web3Auth", error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+  //   init();
+  // }, []);
 
-  const login = async () => {
-    if (!web3Auth) {
-      console.error("Web3Auth is not initialized");
-      return;
-    }
-    try {
-      const web3authProvider = await web3Auth.connect();
-      setProvider(web3authProvider);
-      setLoggedIn(true);
-      const user = await web3Auth.getUserInfo();
-      setUserInfo(user);
-      // if (user.email) {
-      //   localStorage.setItem("userEmail", user.email);
-      //   try {
-      //     await createUser(user.email, user.name || "Anonymous User");
-      //   } catch (error) {
-      //     console.error("Error Creating User", error);
-      //   }
-      // }
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  // const login = async () => {
+  //   if (!web3Auth) {
+  //     console.error("Web3Auth is not initialized");
+  //     return;
+  //   }
+  //   try {
+  //     const web3authProvider = await web3Auth.connect();
+  //     setProvider(web3authProvider);
+  //     setLoggedIn(true);
+  //     const user = await web3Auth.getUserInfo();
+  //     setUserInfo(user);
+  //     // if (user.email) {
+  //     //   localStorage.setItem("userEmail", user.email);
+  //     //   try {
+  //     //     await createUser(user.email, user.name || "Anonymous User");
+  //     //   } catch (error) {
+  //     //     console.error("Error Creating User", error);
+  //     //   }
+  //     // }
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
-  const logout = async () => {
-    if (!web3Auth) {
-      console.error("Web3Auth is not initialized");
-      return;
-    }
-    try {
-      await web3Auth.logout();
-      setProvider(null);
-      setLoggedIn(false);
-      setUserInfo(null);
-      // localStorage.removeItem("userEmail");
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  // const logout = async () => {
+  //   if (!web3Auth) {
+  //     console.error("Web3Auth is not initialized");
+  //     return;
+  //   }
+  //   try {
+  //     await web3Auth.logout();
+  //     setProvider(null);
+  //     setLoggedIn(false);
+  //     setUserInfo(null);
+  //     // localStorage.removeItem("userEmail");
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+
+  // if (loading) {
+  //   return <div>Loading Web3 auth.....</div>;
+  // }
 
   return (
     <div className="min-h-screen bg-black/60 md:pt-8 text-white  px-8">
