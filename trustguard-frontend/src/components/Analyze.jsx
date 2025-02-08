@@ -1,13 +1,18 @@
-/* eslint-disable react/prop-types */
 import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Upload } from "lucide-react";
 import { motion } from "framer-motion";
 import AiLogo from "../assets/ai-logo.png";
+import Prism from "prismjs";
+import "prismjs/components/prism-solidity";
+import "prismjs/themes/prism-tomorrow.css"; // Dark code theme
 
-const Analyze = ({ analysisResults, error, handleSubmit }) => {
+const Analyze = () => {
   const [activeCategory, setActiveCategory] = useState("upload");
   const [file, setFileImage] = useState(null);
+  const [analysisResults, setAnalysisResults] = useState(null);
+  const [error, setError] = useState("");
+  const [address, setAddress] = useState("");
 
   const categories = [
     { id: "upload", name: "Upload" },
@@ -25,10 +30,69 @@ const Analyze = ({ analysisResults, error, handleSubmit }) => {
     }
   };
 
+  const handleUploadSubmit = async (e) => {
+    e.preventDefault();
+
+    const fileInput = e.target.elements.contractFile;
+    const file = fileInput.files[0];
+
+    if (!file) {
+      setError("Please select a file.");
+      return;
+    }
+    setError("");
+    const formData = new FormData();
+    formData.append("file", file);
+    try {
+      const response = await fetch("/audit", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || "Analysis failed");
+      }
+      setAnalysisResults(data);
+      Prism.highlightAll();
+      // const mockResults = {
+      //   category: "Reentrancy Attack",
+      //   fixed_contract: "contract FixedExample { /* fixed code */ }",
+      //   code_snippets: [{ fix: "modifier nonReentrant { /* logic */ }" }],
+      // };
+      // setAnalysisResults(mockResults);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+  const handleAddressSubmit = async (e) => {
+    e.preventDefault();
+    if (!address) {
+      setError("Please enter a contract address.");
+      return;
+    }
+    setError("");
+    try {
+      const response = await fetch(`/reputation/${address}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ address }),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || "Reputation analysis failed");
+      }
+      setAnalysisResults(data);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
   const renderAnalyzeComponent = () => (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-xl mx-auto">
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleUploadSubmit} className="space-y-4">
           <div className="flex flex-col justify-center items-center">
             <label className="block text-sm font-medium text-indigo-200">
               Smart Contract File
@@ -106,7 +170,7 @@ const Analyze = ({ analysisResults, error, handleSubmit }) => {
   const renderAddressComponent = () => (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-xl mx-auto">
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleAddressSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-indigo-200">
               Contract Address
@@ -116,6 +180,8 @@ const Analyze = ({ analysisResults, error, handleSubmit }) => {
               name="contractUrl"
               placeholder="Enter contract Address"
               required
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
               className="mt-1 block w-full text-indigo-200 bg-indigo-900/50 border border-indigo-600/30 rounded-lg p-2"
             />
           </div>
