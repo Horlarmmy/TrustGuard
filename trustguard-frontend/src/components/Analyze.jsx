@@ -41,28 +41,33 @@ const Analyze = () => {
 
   const handleUploadSubmit = async (e) => {
     e.preventDefault();
-
+  
     if (!contractContent) {
       setError("Please select a file.");
       return;
     }
-
+  
     try {
       const response = await fetch(
         "https://trustguard-0ue8.onrender.com/audit",
         {
           method: "POST",
           headers: {
+            "Accept": "application/json",
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ content: contractContent }),
+          body: JSON.stringify({
+            content: contractContent
+          })
         }
       );
-
-      const data = await response.json();
+  
       if (!response.ok) {
-        throw new Error(data.error || "Analysis failed");
+        const errorData = await response.json();
+        throw new Error(errorData.error || `Error: ${response.status}`);
       }
+  
+      const data = await response.json();
       setAnalysisResults(data);
       Prism.highlightAll();
     } catch (err) {
