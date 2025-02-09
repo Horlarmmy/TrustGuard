@@ -46,6 +46,7 @@ const Analyze = () => {
       setError("Please select a file.");
       return;
     }
+    console.log(contractContent)
   
     try {
       const response = await fetch(
@@ -53,12 +54,9 @@ const Analyze = () => {
         {
           method: "POST",
           headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json",
+            "Content-Type": "text/plain",  // Changed to text/plain for raw content
           },
-          body: JSON.stringify({
-            content: contractContent
-          })
+          body: contractContent  // Sending raw content directly
         }
       );
   
@@ -74,6 +72,8 @@ const Analyze = () => {
       setError(err.message);
     }
   };
+  
+
 
   const renderAnalyzeComponent = () => (
     <div className="container mx-auto px-4 py-8">

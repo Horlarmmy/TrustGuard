@@ -23,20 +23,14 @@ def home():
 def audit():
     """Handle smart contract content analysis and generate a fixed version."""
     try:
-        # Check content type
-        if not request.is_json:
-            return jsonify({'error': 'Content-Type must be application/json'}), 415
-            
-        # Get JSON data from request
-        data = request.get_json()
+        # Get raw content from request
+        smart_contract_text = request.get_data(as_text=True)
         
-        if not data or 'content' not in data:
+        if not smart_contract_text:
             return jsonify({'error': 'No contract content provided'}), 400
 
-        smart_contract_text = data['content']
-        
         # Basic validation of contract content
-        if not smart_contract_text or not isinstance(smart_contract_text, str):
+        if not isinstance(smart_contract_text, str):
             return jsonify({'error': 'Invalid contract content'}), 400
 
         # Validate that the content looks like a smart contract
