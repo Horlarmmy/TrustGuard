@@ -19,39 +19,7 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
 
 @app.route('/')
 def home():
-    """Render the home page with code samples"""
-    code_samples = [
-        {
-            'title': 'Reentrancy Vulnerability',
-            'code': '''
-contract VulnerableBank {
-    mapping(address => uint) public balances;
-
-    function withdraw() public {
-        uint balance = balances[msg.sender];
-        require(balance > 0);
-        
-        // Vulnerability: External call before state update
-        msg.sender.transfer(balance);
-        balances[msg.sender] = 0;
-    }
-}''',
-            'fix': '''
-contract SecureBank {
-    mapping(address => uint) public balances;
-
-    function withdraw() public {
-        uint balance = balances[msg.sender];
-        require(balance > 0);
-        
-        // Fix: Update state before external call
-        balances[msg.sender] = 0;
-        msg.sender.transfer(balance);
-    }
-}'''
-        },
-         ]
-    return render_template('index.html', code_samples=code_samples)
+    return jsonify({'message': 'Welcome to TrustGuard AI'})
 
 @app.route('/audit', methods=['POST'])
 def audit():
