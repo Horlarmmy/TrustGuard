@@ -1,37 +1,27 @@
-# app/Dockerfile
+# Use an official Python runtime as a parent image
 FROM python:3.9-slim
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    gcc \
-    python3-dev \
-    libssl-dev \
-    && rm -rf /var/lib/apt/lists/*
+# Set environment variables for Python
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
-# Install solc
-# RUN apt-get update && apt-get install -y software-properties-common \
-#     && add-apt-repository ppa:ethereum/ethereum \
-#     && apt-get update \
-#     && apt-get install -y solc
-
+# Set the working directory
 WORKDIR /app
 
-# Copy requirements first to leverage Docker cache
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Copy the requirements file and install dependencies
+COPY requirements.txt /app/requirements.txt
+RUN pip install --upgrade pip && pip install -r requirements.txt
 
-# Copy application files
-COPY . .
+# Copy the rest of the application code
+COPY . /app
 
-# Install Solidity compiler
-RUN pip install py-solc-x && \
-    python -c "from solcx import install_solc; install_solc('0.8.0')"
+# Expose the port the app runs on (adjust if necessary)
+EXPOSE 5000
 
-# Expose the application port
-EXPOSE 7081
+
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:7081/ || exit 1
+    CMD curl -f http://localhost:5000/ || exit 1
 
 CMD ["python", "app.py"]
