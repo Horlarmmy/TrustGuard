@@ -2,7 +2,7 @@ const HowItWorksPage = () => {
   return (
     <div className="max-w-5xl mx-auto px-6 py-12">
       <h1 className="text-3xl font-bold text-center mb-6">How It Works</h1>
-      <p className="text-lg text-gray-600 text-center mb-12">
+      <p className="text-lg text-gray-400 text-center mb-12">
         TrustGuard ensures secure AI-powered audits and reputation security in a
         few simple steps.
       </p>
@@ -15,7 +15,7 @@ const HowItWorksPage = () => {
           </div>
           <div>
             <h2 className="text-xl font-semibold">Upload Your Data</h2>
-            <p className="text-gray-600">
+            <p className="text-gray-400">
               Securely upload your smart contract or project files for analysis.
               We support multiple formats to ensure compatibility.
             </p>
@@ -29,7 +29,7 @@ const HowItWorksPage = () => {
           </div>
           <div>
             <h2 className="text-xl font-semibold">AI-Powered Audit</h2>
-            <p className="text-gray-600">
+            <p className="text-gray-400">
               Our advanced AI scans and analyzes your data for vulnerabilities,
               security risks, and reputation threats.
             </p>
@@ -43,7 +43,7 @@ const HowItWorksPage = () => {
           </div>
           <div>
             <h2 className="text-xl font-semibold">Get Your Report</h2>
-            <p className="text-gray-600">
+            <p className="text-gray-400">
               Receive a comprehensive report detailing findings, risk levels,
               and recommendations to improve security.
             </p>
@@ -57,7 +57,7 @@ const HowItWorksPage = () => {
           </div>
           <div>
             <h2 className="text-xl font-semibold">Enhance & Secure</h2>
-            <p className="text-gray-600">
+            <p className="text-gray-400">
               Implement our AI-driven recommendations to strengthen your
               project’s security and build trust with users.
             </p>

@@ -37,7 +37,24 @@ function HomePage() {
       }
     };
     init();
-  }, [setLoggedIn, setProvider]);
+    const handleConnected = async () => {
+      setLoggedIn(true);
+      setProvider(web3Auth.provider);
+    };
+
+    const handleDisconnected = () => {
+      setLoggedIn(false);
+      setProvider(null);
+    };
+
+    web3Auth.on("connected", handleConnected);
+    web3Auth.on("disconnected", handleDisconnected);
+
+    return () => {
+      web3Auth.off("connected", handleConnected);
+      web3Auth.off("disconnected", handleDisconnected);
+    };
+  }, []);
 
   const login = async () => {
     if (!web3Auth) {

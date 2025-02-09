@@ -100,7 +100,7 @@ const Analyze = () => {
 
             <div className="relative">
               <div className="  overflow-hidden">
-                <Upload className="w-24 h-24  text-teal-500 my-4" />
+                <Upload className="w-24 h-24  text-blue-500 my-4" />
               </div>
               <input
                 type="file"
@@ -117,7 +117,7 @@ const Analyze = () => {
                 className="absolute inset-0 cursor-pointer"
               />
             </div>
-            <div className="text-white cursor-pointer border-[2px] px-4 py-2 border-teal-500">
+            <div className="text-white cursor-pointer border-[2px] px-4 py-2 border-blue-500">
               <label htmlFor="contractFile" className="cursor-pointer">
                 {file ? `${file.name}` : "Choose a file"}
               </label>
@@ -125,7 +125,7 @@ const Analyze = () => {
           </div>
           <button
             type="submit"
-            className="w-full bg-teal-500 text-white py-2 px-4 rounded-lg hover:bg-teal-600 transition duration-200"
+            className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-200"
           >
             Analyze Contract {file && `(${file.name})`}
           </button>
@@ -187,7 +187,7 @@ const Analyze = () => {
           </div>
           <button
             type="submit"
-            className="w-full bg-teal-500 text-white py-2 px-4 rounded-lg hover:bg-teal-600 transition duration-200"
+            className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-200"
           >
             Analyze Contract
           </button>
@@ -232,8 +232,8 @@ const Analyze = () => {
                   onClick={() => setActiveCategory(category.id)}
                   className={`py-4 px-6 w-full focus:outline-none ${
                     activeCategory === category.id
-                      ? "border-b-2 border-teal-500 text-teal-500"
-                      : "text-indigo-300 hover:text-teal-400"
+                      ? "border-b-2 border-blue-500 text-blue-500"
+                      : "text-indigo-300 hover:text-blue-400"
                   }`}
                 >
                   {category.name}

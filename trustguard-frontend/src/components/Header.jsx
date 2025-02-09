@@ -113,7 +113,7 @@ const Header = () => {
         <h1 className="text-xl md:text-3xl font-bold">TrustGuard</h1>
       </Link>
 
-      <ul className="hidden md:flex gap-5">
+      <ul className="hidden font-semibold md:flex gap-5">
         <li>
           <NavLink
             to={"/faq"}
