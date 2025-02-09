@@ -1,7 +1,6 @@
 import os
 from dotenv import load_dotenv
-from flask import Flask, request, render_template, jsonify
-import tempfile
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 # Load environment variables
@@ -15,7 +14,6 @@ CORS(app)
 
 # Configuration from environment variables
 app.config['GOOGLE_API_KEY'] = os.getenv('GOOGLE_API_KEY')
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
 
 @app.route('/')
 def home():
@@ -23,37 +21,26 @@ def home():
 
 @app.route('/audit', methods=['POST'])
 def audit():
-    """Handle smart contract audit requests and generate a fixed version of the contract."""
+    """Handle smart contract content analysis and generate a fixed version."""
     try:
-        # Check for file upload
-        if 'file' not in request.files:
-            return jsonify({'error': 'No file uploaded'}), 200
+        # Get JSON data from request
+        data = request.get_json()
         
-        file = request.files['file']
-        if file.filename == '':
-            return jsonify({'error': 'No file selected'}), 200
+        # Validate request data
+        if not data or 'content' not in data:
+            return jsonify({'error': 'No contract content provided'}), 400
 
-        if not file.filename.lower().endswith(('.sol', '.txt')):
-            return jsonify({'error': 'Invalid file type. Please upload a Solidity (.sol) or text file.'}), 400
+        smart_contract_text = data['content']
+        
+        # Basic validation of contract content
+        if not smart_contract_text or not isinstance(smart_contract_text, str):
+            return jsonify({'error': 'Invalid contract content'}), 400
 
-        try:
-            with tempfile.NamedTemporaryFile(delete=False) as temp_file:
-                file.save(temp_file.name)
-                with open(temp_file.name, 'r') as f:
-                    smart_contract_text = f.read()
-        except IOError as e:
-            return jsonify({'error': f'File operation failed: {str(e)}'}), 500
-        finally:
-            try:
-                os.unlink(temp_file.name)
-            except (OSError, UnboundLocalError):
-                pass
-
-        # Validate that the uploaded file looks like a smart contract
+        # Validate that the content looks like a smart contract
         if not is_smart_contract(smart_contract_text):
             return jsonify({
-                'error': 'The uploaded file does not appear to be a valid smart contract. '
-                         'Please upload a Solidity smart contract file.'
+                'error': 'The provided content does not appear to be a valid smart contract. '
+                         'Please ensure you are sending a Solidity smart contract.'
             }), 400
 
         # Analyze the smart contract for vulnerabilities

@@ -4,12 +4,11 @@ import { Upload } from "lucide-react";
 import { motion } from "framer-motion";
 import AiLogo from "../assets/ai-logo.png";
 import Prism from "prismjs";
-import "prismjs/components/prism-solidity";
-import "prismjs/themes/prism-tomorrow.css"; // Dark code theme
 
 const Analyze = () => {
   const [activeCategory, setActiveCategory] = useState("upload");
-  const [file, setFileImage] = useState(null);
+  const [fileName, setFileName] = useState("");
+  const [contractContent, setContractContent] = useState("");
   const [analysisResults, setAnalysisResults] = useState(null);
   const [error, setError] = useState("");
   const [address, setAddress] = useState("");
@@ -21,75 +20,51 @@ const Analyze = () => {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      if (file.size > 5 * 1024 * 1024) {
-        alert("File size must be less than 5MB");
-        return;
-      }
-      setFileImage(file);
+    if (!file) return;
+
+    if (file.size > 5 * 1024 * 1024) {
+      setError("File size must be less than 5MB");
+      return;
     }
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      setContractContent(event.target.result);
+      setFileName(file.name);
+      setError("");
+    };
+    reader.onerror = () => {
+      setError("Error reading file");
+    };
+    reader.readAsText(file);
   };
 
   const handleUploadSubmit = async (e) => {
     e.preventDefault();
 
-    const fileInput = e.target.elements.contractFile;
-    const file = fileInput.files[0];
-
-    if (!file) {
+    if (!contractContent) {
       setError("Please select a file.");
       return;
     }
-    setError("");
-    const formData = new FormData();
-    formData.append("file", file);
+
     try {
       const response = await fetch(
         "https://trustguard-0ue8.onrender.com/audit",
         {
           method: "POST",
-          body: formData,
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ content: contractContent }),
         }
       );
+
       const data = await response.json();
       if (!response.ok) {
         throw new Error(data.error || "Analysis failed");
       }
       setAnalysisResults(data);
       Prism.highlightAll();
-      // const mockResults = {
-      //   category: "Reentrancy Attack",
-      //   fixed_contract: "contract FixedExample { /* fixed code */ }",
-      //   code_snippets: [{ fix: "modifier nonReentrant { /* logic */ }" }],
-      // };
-      // setAnalysisResults(mockResults);
-    } catch (err) {
-      setError(err.message);
-    }
-  };
-  const handleAddressSubmit = async (e) => {
-    e.preventDefault();
-    if (!address) {
-      setError("Please enter a contract address.");
-      return;
-    }
-    setError("");
-    try {
-      const response = await fetch(
-        `https://trustguard-0ue8.onrender.com/reputation/${address}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ address }),
-        }
-      );
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.error || "Reputation analysis failed");
-      }
-      setAnalysisResults(data);
     } catch (err) {
       setError(err.message);
     }
@@ -105,35 +80,40 @@ const Analyze = () => {
             </label>
 
             <div className="relative">
-              <div className="  overflow-hidden">
-                <Upload className="w-24 h-24  text-blue-500 my-4" />
+              <div className="overflow-hidden">
+                <Upload className="w-24 h-24 text-blue-500 my-4" />
               </div>
               <input
                 type="file"
                 name="contractFile"
                 id="contractFile"
                 accept=".sol,.txt"
-                required
                 onChange={handleFileChange}
                 className="hidden"
               />
-
               <label
                 htmlFor="contractFile"
                 className="absolute inset-0 cursor-pointer"
               />
             </div>
+
             <div className="text-white cursor-pointer border-[2px] px-4 py-2 border-blue-500">
               <label htmlFor="contractFile" className="cursor-pointer">
-                {file ? `${file.name}` : "Choose a file"}
+                {fileName || "Choose a file"}
               </label>
             </div>
           </div>
+
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-200"
+            disabled={!contractContent}
+            className={`w-full ${
+              contractContent
+                ? "bg-blue-500 hover:bg-blue-600"
+                : "bg-blue-300 cursor-not-allowed"
+            } text-white py-2 px-4 rounded-lg transition duration-200`}
           >
-            Analyze Contract {file && `(${file.name})`}
+            Analyze Contract {fileName && `(${fileName})`}
           </button>
         </form>
 
@@ -156,15 +136,13 @@ const Analyze = () => {
                   <h3 className="font-semibold text-lg text-indigo-200">
                     Fixed Snippets:
                   </h3>
-                  {analysisResults.fixed_contract && (
-                    <div className="text-white mt-4">
-                      <pre className="bg-gray-900/90 p-4 rounded-lg overflow-auto border border-indigo-100/40">
-                        <code className="text-indigo-100">
-                          {analysisResults.fixed_contract}
-                        </code>
-                      </pre>
-                    </div>
-                  )}
+                  <div className="text-white mt-4">
+                    <pre className="bg-gray-900/90 p-4 rounded-lg overflow-auto border border-indigo-100/40">
+                      <code className="text-indigo-100">
+                        {analysisResults.fixed_contract}
+                      </code>
+                    </pre>
+                  </div>
                 </div>
               )}
             </div>
@@ -204,14 +182,14 @@ const Analyze = () => {
   );
 
   return (
-    <div className="min-h-screen ">
+    <div className="min-h-screen">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <div className="flex justify-center mb-4">
             <motion.img
               src={AiLogo}
               alt="AI Bot"
-              className="h-44 w-44   object-contain"
+              className="h-44 w-44 object-contain"
               animate={{ y: [0, -10, 0] }}
               transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
             />
@@ -229,7 +207,6 @@ const Analyze = () => {
           </p>
         </div>
 
-        {/* Category Tabs */}
         <div className="mb-8">
           <div className="border-b border-indigo-600/30">
             <div className="flex space-x-8 justify-center">
@@ -250,7 +227,6 @@ const Analyze = () => {
           </div>
         </div>
 
-        {/* Content Area */}
         <Card className="bg-indigo-900/25 border-indigo-600/30">
           <CardContent className="p-6">
             {activeCategory === "upload"
