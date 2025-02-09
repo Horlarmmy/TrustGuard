@@ -117,7 +117,7 @@ def analyze_smart_contract(smart_contract_text: str) -> dict:
     Analyzes a smart contract for vulnerabilities using the Google Generative AI model.
     """
     parser = PydanticOutputParser(pydantic_object=SCParser)
-    llm = GoogleGenerativeAI(model="gemini-1.5-flash", api_key=os.getenv("GOOGLE_API_KEY"))
+    llm = GoogleGenerativeAI(model="gemini-1.5-flash", api_key=os.getenv("GOOGLE_GEMINI_API_KEY"))
     prompt = PromptTemplate(
         template=template,
         input_variables=["smart_contract", "vulnerability_patterns"],
@@ -147,7 +147,7 @@ Please produce a corrected version of this smart contract that addresses the ide
          template=fixed_template,
          input_variables=["smart_contract"]
     )
-    llm = GoogleGenerativeAI(model="gemini-1.5-flash", api_key=os.getenv("GOOGLE_API_KEY"))
+    llm = GoogleGenerativeAI(model="gemini-1.5-flash", api_key=os.getenv("GOOGLE_GEMINI_API_KEY"))
     chain = prompt | llm
     # Invoke the chain with the original contract text to get the fixed version.
     fixed_code = chain.invoke({"smart_contract": smart_contract_text})
