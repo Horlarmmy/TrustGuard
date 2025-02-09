@@ -2,6 +2,7 @@ import os
 from dotenv import load_dotenv
 from flask import Flask, request, render_template, jsonify
 import tempfile
+from flask_cors import CORS
 
 # Load environment variables
 load_dotenv()
@@ -10,6 +11,7 @@ load_dotenv()
 from analyze import analyze_smart_contract, is_smart_contract, generate_fixed_contract
 
 app = Flask(__name__)
+CORS(app)
 
 # Configuration from environment variables
 app.config['GOOGLE_API_KEY'] = os.getenv('GOOGLE_API_KEY')
