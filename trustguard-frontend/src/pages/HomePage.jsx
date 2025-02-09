@@ -12,6 +12,7 @@ function HomePage() {
   const [loggedIn, setLoggedIn] = useState(false);
 
   const [loading, setLoading] = useState(true);
+  let isConnected = web3Auth.provider;
 
   // console.log(userInfo.profileImage);
 
@@ -24,10 +25,10 @@ function HomePage() {
   useEffect(() => {
     const init = async () => {
       try {
-        await web3Auth.initModal();
-        setProvider(web3Auth.provider);
+        !isConnected && (await web3Auth?.initModal());
+        setProvider(web3Auth?.provider);
 
-        if (web3Auth.connected) {
+        if (isConnected) {
           setLoggedIn(true);
         }
       } catch (error) {
@@ -47,14 +48,14 @@ function HomePage() {
       setProvider(null);
     };
 
-    web3Auth.on("connected", handleConnected);
-    web3Auth.on("disconnected", handleDisconnected);
+    web3Auth?.on("connected", handleConnected);
+    web3Auth?.on("disconnected", handleDisconnected);
 
     return () => {
-      web3Auth.off("connected", handleConnected);
-      web3Auth.off("disconnected", handleDisconnected);
+      web3Auth?.off("connected", handleConnected);
+      web3Auth?.off("disconnected", handleDisconnected);
     };
-  }, []);
+  }, [isConnected]);
 
   const login = async () => {
     if (!web3Auth) {
