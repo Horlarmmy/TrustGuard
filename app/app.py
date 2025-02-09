@@ -8,6 +8,7 @@ load_dotenv()
 
 # Import the analysis functions including fixed contract generation
 from analyze import analyze_smart_contract, is_smart_contract, generate_fixed_contract
+from reputation import calculate_reputation_score
 
 app = Flask(__name__)
 CORS(app)
@@ -53,6 +54,21 @@ def audit():
     except Exception as e:
         app.logger.error(f"Error processing request: {str(e)}")
         return jsonify({'error': 'An unexpected error occurred. Please try again.'}), 500
+
+@app.route('/reputation', methods=['POST'])
+def reputation():
+    try:
+        address = request.args.get('address')
+
+        if not address:
+            return jsonify({"error": "Address parameter is required"}), 400
+
+        result = calculate_reputation_score(address)
+        return jsonify(result)
+    
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+        
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
