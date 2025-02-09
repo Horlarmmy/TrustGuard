@@ -1,5 +1,4 @@
 flask==2.3.2
-tensorflow==2.18.0
 web3==6.4.0
 py-solc-x==2.0.3
 python-dotenv==1.0.1
@@ -9,3 +8,4 @@ werkzeug==3.0.1
 langchain-google-genai==2.0.1
 pydantic==2.8.0
 google-cloud-aiplatform==1.36.4
+flask-cors==5.0.0

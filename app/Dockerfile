@@ -1,37 +1,38 @@
-# app/Dockerfile
-FROM python:3.9-slim
+# Use an official Python runtime as a parent image
+FROM python:3.12-alpine
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    gcc \
+# Set environment variables for Python
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+
+
+
+# Install necessary system dependencies for GEOS, gcc, and Python modules
+RUN apk add --no-cache \
     python3-dev \
-    libssl-dev \
-    && rm -rf /var/lib/apt/lists/*
+    build-base \
+    geos geos-dev \
+    musl-dev gcc libffi-dev openssl-dev curl
 
-# Install solc
-# RUN apt-get update && apt-get install -y software-properties-common \
-#     && add-apt-repository ppa:ethereum/ethereum \
-#     && apt-get update \
-#     && apt-get install -y solc
-
+# Set the working directory
 WORKDIR /app
 
-# Copy requirements first to leverage Docker cache
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Copy the requirements file and install dependencies
+COPY requirements.txt /app/requirements.txt
 
-# Copy application files
-COPY . .
+# Upgrade pip and install dependencies
+RUN pip install --upgrade pip && pip install -r requirements.txt
 
-# Install Solidity compiler
-RUN pip install py-solc-x && \
-    python -c "from solcx import install_solc; install_solc('0.8.0')"
+# Copy the rest of the application code
+COPY . /app
 
-# Expose the application port
-EXPOSE 7081
+# Expose the port the app runs on
+EXPOSE 5000
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:7081/ || exit 1
+# Health check to ensure service availability
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:5000/ || exit 1
 
+# Run the application
 CMD ["python", "app.py"]

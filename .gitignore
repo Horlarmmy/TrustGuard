@@ -1,4 +1,0 @@
-.env
-#python files
-*.pyc
-__pycache__/
