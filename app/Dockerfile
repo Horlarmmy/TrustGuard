@@ -4,7 +4,7 @@ FROM python:3.12-alpine
 # Set environment variables for Python
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
-ENV GOOGLE_API_KEY AIzaSyCFFMCwHOJ4Ehib3nyJvjIVxTI2KkJLeYk
+
 
 # Install necessary system dependencies for GEOS, gcc, and Python modules
 RUN apk add --no-cache \
