@@ -13,6 +13,7 @@ const Analyze = () => {
   const [analysisResults, setAnalysisResults] = useState(null);
   const [error, setError] = useState("");
   const [address, setAddress] = useState("");
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
 
   const categories = [
     { id: "upload", name: "Upload" },
@@ -32,12 +33,15 @@ const Analyze = () => {
 
   const handleUploadSubmit = async (e) => {
     e.preventDefault();
+    setIsAnalyzing(true);
+    setAnalysisResults(null);
 
     const fileInput = e.target.elements.contractFile;
     const file = fileInput.files[0];
 
     if (!file) {
       setError("Please select a file.");
+      setIsAnalyzing(false);
       return;
     }
     setError("");
@@ -63,6 +67,8 @@ const Analyze = () => {
       //   code_snippets: [{ fix: "modifier nonReentrant { /* logic */ }" }],
       // };
       // setAnalysisResults(mockResults);
+
+      setIsAnalyzing(false);
     } catch (err) {
       setError(err.message);
     }
@@ -137,6 +143,9 @@ const Analyze = () => {
           </button>
         </form>
 
+        {isAnalyzing && (
+          <div className="mt-6 text-indigo-200">Analyzing {file.name}...</div>
+        )}
         {error && <div className="mt-6 text-red-500">{error}</div>}
 
         {analysisResults && (
