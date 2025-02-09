@@ -1,13 +1,9 @@
-version: '2'
-
+version: '3.8'
 services:
-  web3-ai-auditor:
-    build: ./app
+  backend:
+    build: .
     ports:
-      - "7081:7081"
-    env_file:
-      - .env
-    volumes:
-      - ./app/models:/app/models
-      - ./app/uploads:/app/uploads
-    restart: unless-stopped
+      - "5000:5000"
+    environment:
+      - GOOGLE_API_KEY=AIzaSyCFFMCwHOJ4Ehib3nyJvjIVxTI2KkJLeYk
+      # Add additional environment variables here as needed

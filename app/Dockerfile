@@ -4,6 +4,7 @@ FROM python:3.9-slim
 # Set environment variables for Python
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
+ENV GOOGLE_API_KEY AIzaSyCFFMCwHOJ4Ehib3nyJvjIVxTI2KkJLeYk
 
 # Set the working directory
 WORKDIR /app
