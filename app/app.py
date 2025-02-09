@@ -27,11 +27,11 @@ def audit():
     try:
         # Check for file upload
         if 'file' not in request.files:
-            return jsonify({'error': 'No file uploaded'}), 400
+            return jsonify({'error': 'No file uploaded'}), 200
         
         file = request.files['file']
         if file.filename == '':
-            return jsonify({'error': 'No file selected'}), 400
+            return jsonify({'error': 'No file selected'}), 200
 
         if not file.filename.lower().endswith(('.sol', '.txt')):
             return jsonify({'error': 'Invalid file type. Please upload a Solidity (.sol) or text file.'}), 400
