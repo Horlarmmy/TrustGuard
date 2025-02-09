@@ -9,7 +9,7 @@ import AboutPage from "./pages/AboutPage";
 function App() {
   return (
     <>
-      <div className="absolute top-0 left-0 w-full min-h-full bg-black/70 z-0"></div>
+      <div className="absolute top-0 left-0 w-full min-h-full bg-black/80 z-0"></div>
       <div className="pt-8 relative">
         <Router>
           <Header />
