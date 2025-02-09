@@ -44,11 +44,15 @@ const Analyze = () => {
     const formData = new FormData();
     formData.append("file", file);
     try {
-      const response = await fetch("/audit", {
-        method: "POST",
-        body: formData,
-      });
+      const response = await fetch(
+        "https://trustguard-0ue8.onrender.com/audit",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
       const data = await response.json();
+      console.log(data);
       if (!response.ok) {
         throw new Error(data.error || "Analysis failed");
       }
@@ -72,13 +76,16 @@ const Analyze = () => {
     }
     setError("");
     try {
-      const response = await fetch(`/reputation/${address}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ address }),
-      });
+      const response = await fetch(
+        `https://trustguard-0ue8.onrender.com/reputation/${address}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ address }),
+        }
+      );
       const data = await response.json();
       if (!response.ok) {
         throw new Error(data.error || "Reputation analysis failed");
@@ -145,19 +152,20 @@ const Analyze = () => {
                 </h3>
                 <p className="text-indigo-100">{analysisResults.category}</p>
               </div>
-              {analysisResults.code_snippets && (
+              {analysisResults.fixed_contract && (
                 <div>
                   <h3 className="font-semibold text-lg text-indigo-200">
                     Fixed Snippets:
                   </h3>
-                  {analysisResults.code_snippets.map((snippet, index) => (
-                    <div key={index} className="text-white mt-4">
-                      <h4 className="font-medium mb-2">Fix {index + 1}</h4>
-                      <pre className="bg-indigo-900/50 p-4 rounded-lg overflow-auto border border-indigo-600/30">
-                        <code className="text-indigo-100">{snippet.fix}</code>
+                  {analysisResults.fixed_contract && (
+                    <div className="text-white mt-4">
+                      <pre className="bg-gray-900/90 p-4 rounded-lg overflow-auto border border-indigo-100/40">
+                        <code className="text-indigo-100">
+                          {analysisResults.fixed_contract}
+                        </code>
                       </pre>
                     </div>
-                  ))}
+                  )}
                 </div>
               )}
             </div>
