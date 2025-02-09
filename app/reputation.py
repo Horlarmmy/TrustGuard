@@ -18,7 +18,7 @@ ETHERSCAN_API_KEY = os.getenv("ETHERSCAN_API_KEY")
 WALLET_ADDRESS = os.getenv("WALLET_ADDRESS")
 # DUNE_API_KEY = os.getenv("DUNE_API_KEY")
 
-GOOGLE_GEMINI_API_KEY = os.getenv("GOOGLE_GEMINI_API_KEY")
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 if not GOOGLE_GEMINI_API_KEY:
     raise ValueError("Google Gemini API key is missing. Set GOOGLE_GEMINI_API_KEY as an environment variable.")
 if not ETHERSCAN_API_KEY:
