@@ -176,7 +176,7 @@ const Analyze = () => {
               Contract Address
             </label>
             <input
-              type="url"
+              type="text"
               name="contractUrl"
               placeholder="Enter contract Address"
               required

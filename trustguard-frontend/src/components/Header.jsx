@@ -8,6 +8,7 @@ import { ChevronDown, LogIn } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { useEffect, useState } from "react";
 import { web3Auth } from "@/hooks/Wallet";
+import { Link, NavLink } from "react-router-dom";
 
 const Header = () => {
   const [, setProvider] = useState(null);
@@ -108,7 +109,37 @@ const Header = () => {
 
   return (
     <header className="md:mx-auto w-full md:max-w-7xl justify-around flex md:justify-between items-center md:px-10 border-gray-700 md:border rounded-full py-6">
-      <h1 className="text-xl md:text-3xl font-bold">TrustGuard</h1>
+      <Link to={""}>
+        <h1 className="text-xl md:text-3xl font-bold">TrustGuard</h1>
+      </Link>
+
+      <ul className="hidden md:flex gap-5">
+        <li>
+          <NavLink
+            to={"/faq"}
+            className={({ isActive }) => (isActive ? "text-blue-500" : "")}
+          >
+            FAQ
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
+            to={"/how-it-works"}
+            className={({ isActive }) => (isActive ? "text-blue-500" : "")}
+          >
+            How it works
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
+            to={"/about"}
+            className={({ isActive }) => (isActive ? "text-blue-500" : "")}
+          >
+            About
+          </NavLink>
+        </li>
+      </ul>
+
       {!loggedIn ? (
         <Button
           onClick={login}
