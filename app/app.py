@@ -8,7 +8,7 @@ load_dotenv()
 
 # Import the analysis functions including fixed contract generation
 from analyze import analyze_smart_contract, is_smart_contract, generate_fixed_contract
-from reputation import calculate_reputation_score
+# from reputation import calculate_reputation_score
 
 app = Flask(__name__)
 CORS(app)
