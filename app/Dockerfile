@@ -2,8 +2,12 @@
 FROM python:3.12-alpine
 
 # Set environment variables for Python
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+# Define build argument for the API key
+ARG GOOGLE_API_KEY
+ENV GOOGLE_API_KEY=$GOOGLE_API_KEY
+
 
 
 # Install necessary system dependencies for GEOS, gcc, and Python modules

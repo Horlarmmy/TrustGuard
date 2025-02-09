@@ -100,5 +100,5 @@ def audit():
         app.logger.error(f"Error processing request: {str(e)}")
         return jsonify({'error': 'An unexpected error occurred. Please try again.'}), 500
 
-if __name__ == '__main__':
-    app.run(debug=True)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
