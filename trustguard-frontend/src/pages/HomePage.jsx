@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
 import AiLogo from "../assets/ai-logo.png";
-import Aibg from "../assets/ai-bg.webp";
+// import Aibg from "../assets/ai-bg.webp";
 
 import { useNavigate } from "react-router-dom";
 import { web3Auth } from "@/hooks/Wallet";
@@ -12,6 +12,7 @@ function HomePage() {
   const [loggedIn, setLoggedIn] = useState(false);
 
   const [loading, setLoading] = useState(true);
+  let isConnected = web3Auth.provider;
 
   // console.log(userInfo.profileImage);
 
@@ -24,10 +25,10 @@ function HomePage() {
   useEffect(() => {
     const init = async () => {
       try {
-        await web3Auth.initModal();
-        setProvider(web3Auth.provider);
+        !isConnected && (await web3Auth?.initModal());
+        setProvider(web3Auth?.provider);
 
-        if (web3Auth.connected) {
+        if (isConnected) {
           setLoggedIn(true);
         }
       } catch (error) {
@@ -47,14 +48,14 @@ function HomePage() {
       setProvider(null);
     };
 
-    web3Auth.on("connected", handleConnected);
-    web3Auth.on("disconnected", handleDisconnected);
+    web3Auth?.on("connected", handleConnected);
+    web3Auth?.on("disconnected", handleDisconnected);
 
     return () => {
-      web3Auth.off("connected", handleConnected);
-      web3Auth.off("disconnected", handleDisconnected);
+      web3Auth?.off("connected", handleConnected);
+      web3Auth?.off("disconnected", handleDisconnected);
     };
-  }, []);
+  }, [isConnected]);
 
   const login = async () => {
     if (!web3Auth) {
@@ -72,7 +73,7 @@ function HomePage() {
 
   if (loading) {
     return (
-      <div className="absolute  -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
+      <div className="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
         <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
         <h1></h1>
       </div>
@@ -82,9 +83,9 @@ function HomePage() {
   return (
     <div
       className="min-h-screen md:pt-8 text-white px-8 bg-cover bg-no-repeat bg-center relative"
-      style={{ backgroundImage: `url(${Aibg})` }}
+      // style={{ backgroundImage: `url(${Aibg})` }}
     >
-      <div className="absolute top-0 left-0 w-full h-full bg-black/70 z-0"></div>
+      {/* <div className="absolute top-0 left-0 w-full h-full bg-black/70 z-0"></div> */}
       <main className="flex flex-col justify-center items-center space-y-16 mt-20 z-10 relative">
         <div className=" mx-auto max-w-7xl justify-center grid items-center md:grid-cols-2 gap-28 ">
           <div className="space-y-9">

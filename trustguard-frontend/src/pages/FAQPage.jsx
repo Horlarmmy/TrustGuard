@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
-import Aibg from "../assets/ai-bg.webp";
+// import Aibg from "../assets/ai-bg.webp";
 
 const faqs = [
   {
@@ -34,10 +34,10 @@ const FAQPage = () => {
 
   return (
     <div
-      className="min-h-screen flex flex-col items-center bg-black/60 bg-cover bg-no-repeat bg-center text-white p-8 relative"
-      style={{ backgroundImage: `url(${Aibg})` }}
+      className="min-h-screen flex flex-col items-center bg-cover bg-no-repeat bg-center text-white p-8 relative"
+      // style={{ backgroundImage: `url(${Aibg})` }}
     >
-      <div className="absolute top-0 left-0 w-full h-full bg-black/80 z-0"></div>
+      {/* <div className="absolute top-0 left-0 w-full h-full bg-black/80 z-0"></div> */}
       <div className="max-w-5xl w-full relative z-10">
         <h1 className="text-5xl ffont-semibold shadow-lg leading-normal text-center mb-6">
           AI-Powered Audit & Reputation Security

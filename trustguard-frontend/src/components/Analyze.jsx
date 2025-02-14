@@ -12,6 +12,7 @@ const Analyze = () => {
   const [analysisResults, setAnalysisResults] = useState(null);
   const [error, setError] = useState("");
   const [address, setAddress] = useState("");
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
 
   const categories = [
     { id: "upload", name: "Upload" },
@@ -41,9 +42,13 @@ const Analyze = () => {
 
   const handleUploadSubmit = async (e) => {
     e.preventDefault();
+
+
   
     if (!contractContent) {
+
       setError("Please select a file.");
+      setIsAnalyzing(false);
       return;
     }
     console.log(contractContent)
@@ -122,6 +127,9 @@ const Analyze = () => {
           </button>
         </form>
 
+        {isAnalyzing && (
+          <div className="mt-6 text-indigo-200">Analyzing {file.name}...</div>
+        )}
         {error && <div className="mt-6 text-red-500">{error}</div>}
 
         {analysisResults && (
@@ -179,7 +187,7 @@ const Analyze = () => {
             type="submit"
             className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-200"
           >
-            Analyze Contract
+            Get Reputation score
           </button>
         </form>
       </div>
